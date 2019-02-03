@@ -9,6 +9,16 @@ import java.util.List;
 
 public class Throw {
 
+
+    private static final Integer POINT_PAIR = 10;
+    private static final Integer POINT_DOUBLEPAIR = 20;
+    private static final Integer POINT_THREEOAK = 25;
+    private static final Integer POINT_FULL = 30;
+    private static final Integer POINT_LITTLEFLUSH = 35;
+    private static final Integer POINT_GREATFLUSH = 40;
+    private static final Integer POINT_FOUROAK = 45;
+    private static final Integer POINT_YAMS = 50;
+
     public void requestThrow(List<Dice> diceList) {
 
         for (Dice d : diceList) {
@@ -95,80 +105,64 @@ public class Throw {
 
     public void checkPossibilities(int[] throwRes){
 
-        EnumMap<Row, List<Integer>> possibilities = new EnumMap<>(Row.class);
-        List<Integer> pairList = new ArrayList<>();
-        List<Integer> threeOAKList = new ArrayList<>();
-        List<Integer> fourOAKList = new ArrayList<>();
-        List<Integer> yamsList = new ArrayList<>();
-        List<Integer> flushList = new ArrayList<>();
-        List<Integer> oneList = new ArrayList<>();
-        List<Integer> twoList = new ArrayList<>();
-        List<Integer> threeList = new ArrayList<>();
-        List<Integer> fourList = new ArrayList<>();
-        List<Integer> fiveList = new ArrayList<>();
-        List<Integer> sixList = new ArrayList<>();
+        EnumMap<Row, Integer> possibilities = new EnumMap<>(Row.class);
         int throwSum = 0;
 
+        for(int j = 0; j < Row.values().length ; j++) {
+            possibilities.put(Row.values()[j], 0);
+        }
+
         // 1, 2, 3, 4, 5, 6
-        oneList.add(throwRes[0]);
-        possibilities.put(Row.ONE, oneList);
-        twoList.add(throwRes[1]);
-        possibilities.put(Row.TWO, twoList);
-        threeList.add(throwRes[2]);
-        possibilities.put(Row.THREE, threeList);
-        fourList.add(throwRes[3]);
-        possibilities.put(Row.FOUR, fourList);
-        fiveList.add(throwRes[4]);
-        possibilities.put(Row.FIVE, fiveList);
-        sixList.add(throwRes[5]);
-        possibilities.put(Row.SIX, sixList);
+        possibilities.put(Row.ONE, throwRes[0]);
+        possibilities.put(Row.TWO, throwRes[1]*2);
+        possibilities.put(Row.THREE, throwRes[2]*3);
+        possibilities.put(Row.FOUR, throwRes[3]*4);
+        possibilities.put(Row.FIVE, throwRes[4]*5);
+        possibilities.put(Row.SIX, throwRes[5]*6);
+        List<Integer> pairList = new ArrayList<>();
 
-
-        for (int i = 0 ; i < throwRes.length ; i++){
+        for (int i = 0; i < throwRes.length ; i++){
             throwSum += throwRes[i]*(i+1);
 
             if (throwRes[i] >= 2) {
-                pairList.add(i+1);
-                possibilities.put(Row.PAIR, pairList);
+                pairList.add(i);
+                possibilities.put(Row.PAIR, POINT_PAIR);
             }
 
             if (throwRes[i] >= 3) {
-                threeOAKList.add(i+1);
-                possibilities.put(Row.THREEOAK, threeOAKList);
+                possibilities.put(Row.THREEOAK, POINT_THREEOAK);
             }
 
             if (throwRes[i] >= 4) {
-                fourOAKList.add(i+1);
-                possibilities.put(Row.FOUROAK, fourOAKList);
+                possibilities.put(Row.FOUROAK, POINT_FOUROAK);
             }
 
             if (throwRes[i] >= 5) {
-                yamsList.add(i+1);
-                possibilities.put(Row.YAMS, yamsList);
+                possibilities.put(Row.YAMS, POINT_YAMS);
             }
         }
 
-        if (pairList.size() == 2){
-            possibilities.put(Row.TWOPAIR, pairList);
+        if (pairList.size() == 2 || possibilities.get(Row.FOUROAK).equals(POINT_FOUROAK)){
+            possibilities.put(Row.TWOPAIR, POINT_DOUBLEPAIR);
         }
 
-        if (pairList.size() == 2 && threeOAKList.size() == 1){
-            possibilities.put(Row.FULL, pairList);
+        if (possibilities.get(Row.PAIR).equals(POINT_PAIR)
+                && possibilities.get(Row.THREEOAK).equals(POINT_THREEOAK)
+                && pairList.size() == 2){
+            possibilities.put(Row.FULL, POINT_FULL);
         }
 
         if (pairList.size() == 0 && throwSum == 15){
-            flushList.add(1);
-            possibilities.put(Row.LITTLEFLUSH, flushList);
+            possibilities.put(Row.LITTLEFLUSH, POINT_LITTLEFLUSH);
         }
 
         if (pairList.size() == 0 && throwSum == 20){
-            flushList.add(1);
-            possibilities.put(Row.GREATFLUSH, flushList);
+            possibilities.put(Row.GREATFLUSH, POINT_GREATFLUSH);
         }
+
+        possibilities.put(Row.MINI, throwSum);
+        possibilities.put(Row.MAXI, throwSum);
 
         System.out.println(possibilities);
     }
-
-
-
 }
