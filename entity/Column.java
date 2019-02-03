@@ -51,7 +51,6 @@ public class Column {
             column.put(Row.values()[i], 0);
         }
         this.isEmpty = true;
-
     }
 
     public Object getRow(int i){

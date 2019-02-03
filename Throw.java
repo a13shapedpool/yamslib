@@ -1,9 +1,10 @@
 package com.example.yamslib;
 
-
 import com.example.yamslib.entity.Dice;
 import com.example.yamslib.entity.Row;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 public class Throw {
@@ -18,7 +19,7 @@ public class Throw {
 
         GameLauncher.throwNumber += 1;
 
-        System.out.format("Throw number %d ||| Dices : %d %d %d %d %d",
+        System.out.format("Throw number %d ||| Dices : %d %d %d %d %d\n",
                 GameLauncher.throwNumber,
                 diceList.get(0).getValue(),
                 diceList.get(1).getValue(),
@@ -43,13 +44,27 @@ public class Throw {
 
     public void analyseThrow(List<Dice> diceList) {
 
+        int[] throwRes;
         int[] values = getDicesValues(diceList);
-        pair(values);
+        int sum = getDicesSum(values);
+
+        throwRes = analyseThrowCount(values);
+        checkPossibilities(throwRes);
 
 
     }
 
-    public void analyseThrowCount(int[] valuesArray){
+    private int getDicesSum(int[] values) {
+
+        int sum = 0;
+        for (int i = 0 ; i < values.length ; i++){
+            sum += values[i];
+        }
+        return sum;
+
+    }
+
+    public int[] analyseThrowCount(int[] valuesArray){
 
         int countOne = 0;
         int countTwo = 0;
@@ -57,36 +72,83 @@ public class Throw {
         int countFour = 0;
         int countFive = 0;
         int countSix = 0;
-
-        for (int i: valuesArray){
-            switch(i){
-                case 1: countOne += 1;
-                case 2: countTwo += 1;
-                case 3: countThree += 1;
-                case 4: countFour += 1;
-                case 5: countFive += 1;
-                case 6: countSix += 1;
-            }
-        }
-    }
-
-
-
-    public int pair(int[] valuesArray){
-
-        boolean pairFound = false;
-        int pairValue;
+        int counts[] = new int[6];
 
         for (int i = 0 ; i < valuesArray.length ; i++){
-            for (int j = i + 1 ; j < valuesArray.length ; j++){
-                if (valuesArray[i] == (valuesArray[j])){
-                    pairFound = true;
-                    pairValue = valuesArray[i];
-                    System.out.format("\nYay une paire de %d", pairValue);
-                    return pairValue;
-                }
+            switch(valuesArray[i]){
+                case 1: countOne += 1; break;
+                case 2: countTwo += 1; break;
+                case 3: countThree += 1; break;
+                case 4: countFour += 1; break;
+                case 5: countFive += 1; break;
+                case 6: countSix += 1; break;
             }
         }
-        return 0;
+        counts[0] = countOne;
+        counts[1] = countTwo;
+        counts[2] = countThree;
+        counts[3] = countFour;
+        counts[4] = countFive;
+        counts[5] = countSix;
+        return counts;
     }
+
+    public void checkPossibilities(int[] throwRes){
+
+        EnumMap<Row, List<Integer>> possibilities = new EnumMap<>(Row.class);
+        List<Integer> pairList = new ArrayList<>();
+        List<Integer> threeOAKList = new ArrayList<>();
+        List<Integer> fourOAKList = new ArrayList<>();
+        List<Integer> yamsList = new ArrayList<>();
+        List<Integer> flushList = new ArrayList<>();
+        int throwSum = 0;
+
+        for (int i = 0 ; i < throwRes.length ; i++){
+
+            throwSum += throwRes[i]*(i+1);
+
+            if (throwRes[i] >= 2) {
+                pairList.add(i+1);
+                possibilities.put(Row.PAIR, pairList);
+            }
+
+            if (throwRes[i] >= 3) {
+                threeOAKList.add(i+1);
+                possibilities.put(Row.THREEOAK, threeOAKList);
+            }
+
+            if (throwRes[i] >= 4) {
+                fourOAKList.add(i+1);
+                possibilities.put(Row.FOUROAK, fourOAKList);
+            }
+
+            if (throwRes[i] >= 5) {
+                yamsList.add(i+1);
+                possibilities.put(Row.YAMS, yamsList);
+            }
+        }
+
+        if (pairList.size() == 2){
+            possibilities.put(Row.TWOPAIR, pairList);
+        }
+
+        if (pairList.size() == 2 && threeOAKList.size() == 1){
+            possibilities.put(Row.FULL, pairList);
+        }
+
+        if (pairList.size() == 0 && throwSum == 15){
+            flushList.add(1);
+            possibilities.put(Row.LITTLEFLUSH, flushList);
+        }
+
+        if (pairList.size() == 0 && throwSum == 20){
+            flushList.add(1);
+            possibilities.put(Row.GREATFLUSH, flushList);
+        }
+
+        System.out.println(possibilities);
+    }
+
+
+
 }

@@ -3,8 +3,6 @@ package com.example.yamslib;
 import com.example.yamslib.entity.Column;
 import com.example.yamslib.entity.Dice;
 import com.example.yamslib.entity.Player;
-import com.example.yamslib.entity.Row;
-import com.example.yamslib.entity.Type;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,9 +34,11 @@ public class GameLauncher {
 
         System.out.println("\n ------- GAME GENERATED ------- \n");
 
-        Throw throw1 = new Throw();
-        throw1.requestThrow(diceList);
 
+        for (int i = 0; i < 500 ; i++){
+            Throw throw1 = new Throw();
+            throw1.requestThrow(diceList);
+        }
     }
 
     public static void generatePlayers() throws IOException{
