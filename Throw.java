@@ -72,7 +72,7 @@ public class Throw {
         int countFour = 0;
         int countFive = 0;
         int countSix = 0;
-        int counts[] = new int[6];
+        int throwRes[] = new int[6];
 
         for (int i = 0 ; i < valuesArray.length ; i++){
             switch(valuesArray[i]){
@@ -84,13 +84,13 @@ public class Throw {
                 case 6: countSix += 1; break;
             }
         }
-        counts[0] = countOne;
-        counts[1] = countTwo;
-        counts[2] = countThree;
-        counts[3] = countFour;
-        counts[4] = countFive;
-        counts[5] = countSix;
-        return counts;
+        throwRes[0] = countOne;
+        throwRes[1] = countTwo;
+        throwRes[2] = countThree;
+        throwRes[3] = countFour;
+        throwRes[4] = countFive;
+        throwRes[5] = countSix;
+        return throwRes;
     }
 
     public void checkPossibilities(int[] throwRes){
@@ -101,10 +101,30 @@ public class Throw {
         List<Integer> fourOAKList = new ArrayList<>();
         List<Integer> yamsList = new ArrayList<>();
         List<Integer> flushList = new ArrayList<>();
+        List<Integer> oneList = new ArrayList<>();
+        List<Integer> twoList = new ArrayList<>();
+        List<Integer> threeList = new ArrayList<>();
+        List<Integer> fourList = new ArrayList<>();
+        List<Integer> fiveList = new ArrayList<>();
+        List<Integer> sixList = new ArrayList<>();
         int throwSum = 0;
 
-        for (int i = 0 ; i < throwRes.length ; i++){
+        // 1, 2, 3, 4, 5, 6
+        oneList.add(throwRes[0]);
+        possibilities.put(Row.ONE, oneList);
+        twoList.add(throwRes[1]);
+        possibilities.put(Row.TWO, twoList);
+        threeList.add(throwRes[2]);
+        possibilities.put(Row.THREE, threeList);
+        fourList.add(throwRes[3]);
+        possibilities.put(Row.FOUR, fourList);
+        fiveList.add(throwRes[4]);
+        possibilities.put(Row.FIVE, fiveList);
+        sixList.add(throwRes[5]);
+        possibilities.put(Row.SIX, sixList);
 
+
+        for (int i = 0 ; i < throwRes.length ; i++){
             throwSum += throwRes[i]*(i+1);
 
             if (throwRes[i] >= 2) {
