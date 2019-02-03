@@ -53,6 +53,10 @@ public class Column {
         this.isEmpty = true;
     }
 
+    public void displayColumn(){
+        System.out.println(this.column);
+    }
+
     public Object getRow(int i){
         return column.keySet().toArray()[i];
     }

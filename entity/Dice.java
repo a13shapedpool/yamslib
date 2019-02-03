@@ -20,6 +20,7 @@ public class Dice {
     public int getValue(){
         return this.value;
     }
+
     public int getNumber(){
         return this.number;
     }
@@ -27,10 +28,9 @@ public class Dice {
     public boolean getRelaunch(){
         return this.relaunch; }
 
-    public void relaunchRequest() {
-        this.relaunch = true;
+    public void saveDice() {
+        this.relaunch = false;
     }
-
 
     public void rollDice(){
         Random r = new Random();

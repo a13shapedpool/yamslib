@@ -1,5 +1,6 @@
 package com.example.yamslib;
 
+import com.example.yamslib.entity.Column;
 import com.example.yamslib.entity.Dice;
 import com.example.yamslib.entity.Row;
 
@@ -27,8 +28,6 @@ public class Throw {
             }
         }
 
-        GameLauncher.throwNumber += 1;
-
         System.out.format("Throw number %d ||| Dices : %d %d %d %d %d\n",
                 GameLauncher.throwNumber,
                 diceList.get(0).getValue(),
@@ -36,8 +35,6 @@ public class Throw {
                 diceList.get(2).getValue(),
                 diceList.get(3).getValue(),
                 diceList.get(4).getValue());
-
-        analyseThrow(diceList);
 
     }
 
@@ -52,16 +49,8 @@ public class Throw {
         return valuesArray;
     }
 
-    public void analyseThrow(List<Dice> diceList) {
-
-        int[] throwRes;
-        int[] values = getDicesValues(diceList);
-        int sum = getDicesSum(values);
-
-        throwRes = analyseThrowCount(values);
-        checkPossibilities(throwRes);
-
-
+    public int[] analyseThrow(List<Dice> diceList) {
+        return getDicesValues(diceList);
     }
 
     private int getDicesSum(int[] values) {
@@ -103,7 +92,7 @@ public class Throw {
         return throwRes;
     }
 
-    public void checkPossibilities(int[] throwRes){
+    public EnumMap<Row, Integer> checkPossibilities(int[] throwRes){
 
         EnumMap<Row, Integer> possibilities = new EnumMap<>(Row.class);
         int throwSum = 0;
@@ -164,5 +153,7 @@ public class Throw {
         possibilities.put(Row.MAXI, throwSum);
 
         System.out.println(possibilities);
+        return possibilities;
     }
+
 }

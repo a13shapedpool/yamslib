@@ -1,11 +1,14 @@
 package com.example.yamslib.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 
-    String name;
-    int order;
-    int score;
-    int[] cases;
+    private String name;
+    private int order;
+    private int score;
+    private List<Column> scoreboard;
 
 
     public Player (String name, int order) {
@@ -13,12 +16,24 @@ public class Player {
         this.name = name;
         this.order = order;
         this.score = 0;
-        this.cases = new int[0];
+        this.scoreboard = new ArrayList<>();
 
     }
 
     public String getPlayerName(){
         return this.name;
+    }
+
+    public void setScoreboard(List<Column> columnList){
+        for (Column c: columnList){
+
+        }
+
+        this.scoreboard = columnList;
+    }
+
+    public List<Column> getScoreboard(){
+        return this.scoreboard;
     }
 
     public int getOrder(){
@@ -35,6 +50,10 @@ public class Player {
 
     public void updateScore(int point){
         this.score += point;
+    }
+
+    public void saveThrow(int columnNumber, Row row, int point){
+        this.scoreboard.get(columnNumber).addPointToRow(row, point);
     }
 
 }
