@@ -57,12 +57,21 @@ public class Column {
         System.out.println(this.column);
     }
 
-    public Object getRow(int i){
-        return column.keySet().toArray()[i];
+    public int getRow(int i){
+        return (int) column.keySet().toArray()[i];
     }
 
     public String getRow(Row row){
         return row.name();
+    }
+
+    public static Row retrieveRow(String s){
+        for (Row r: Row.values()){
+            if (s.equals(r.toString())){
+                return r;
+            }
+        }
+        return null;
     }
 
     public int getRowValue(int i){

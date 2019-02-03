@@ -7,12 +7,9 @@ import com.example.yamslib.entity.Row;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Random;
-
 
 public class GameLauncher {
 
@@ -117,8 +114,7 @@ public class GameLauncher {
 
         int[] values;
         int[] throwRes;
-        EnumMap<Row, Integer> possibilities;
-
+        Column possibilities;
 
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
@@ -151,22 +147,43 @@ public class GameLauncher {
 
                         System.out.format("\nRerolling other dices...\n");
                         throwNumber += 1;
+                        break;
 
                     case "y":
-                        System.out.println("Which column would you like to save the throw in ?");
-                        int columnSave = Integer.valueOf(reader.readLine());
-                        System.out.println("Which row would you like to save the throw in ?");
-                        int rowSave = Integer.valueOf(reader.readLine());
-
-                        player.saveThrow(columnSave, possibilities.);
+                        inputThrow(player, possibilities);
                         break;
                 }
 
             }else{
                 System.out.println("No more throws available");
+                inputThrow(player, possibilities);
                 break;
             }
         }
 
+    }
+
+    private static void inputThrow(Player player, Column possibilities) throws IOException{
+
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Which column would you like to save the throw in ?");
+        int columnSave = Integer.valueOf(reader.readLine());
+        System.out.println("Which row would you like to save the throw in ?");
+        String rowSaveString = reader.readLine();
+        Row rowSave = Column.retrieveRow(rowSaveString);
+        System.out.println("ROW SAVE " + rowSave);
+
+        player.saveThrow(columnSave - 1, rowSave, possibilities.getRowValue(rowSave));
+        player.getScoreboard().get(columnSave - 1).displayColumn();
+        endOfRound();
+    }
+
+    private static void endOfRound(){
+        throwNumber = 3;
+        /*TODO
+        activePlayer = nextPlayer();
+        */
     }
 }
