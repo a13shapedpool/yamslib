@@ -14,13 +14,18 @@ import java.io.InputStreamReader;
 public class GameLauncher {
 
     public static int throwNumber;
+    public static int activePlayerNumber;
+    public static int playersNumber;
     public static List<Dice> diceList = new ArrayList<>(5);
     public static List<Player> playerList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
 
         generateGame();
-        round(playerList.get(0));
+
+        while (!playerList.get(playerList.size()-1).isScoreboardFull()){
+            round(playerList.get(activePlayerNumber));
+        }
 
     }
 
@@ -35,6 +40,14 @@ public class GameLauncher {
 
         System.out.println("\n    ------ \nGAME GENERATED\n    ------\n\n");
 
+//        for (int i = 0; i < 500 ; i++){
+//            Throw diceThrow = new Throw();
+//            diceThrow.requestThrow(diceList);
+//            int[] ²²values = diceThrow.analyseThrow(diceList);
+//            int[] throwRes = diceThrow.analyseThrowCount(values);
+//            Column possibilities = diceThrow.checkPossibilities(throwRes);
+//        }
+
     }
 
     private static void generatePlayers(List<Player> playerList) throws IOException {
@@ -44,7 +57,7 @@ public class GameLauncher {
 
         // Number of players
         System.out.println("How many players ?");
-        int playersNumber = Integer.valueOf(reader.readLine());
+        playersNumber = Integer.valueOf(reader.readLine());
         System.out.format("%d players mode launched \n \n", playersNumber);
 
         // Player names
@@ -87,7 +100,7 @@ public class GameLauncher {
         for (int i = 0; i < playerList.size(); i++) {
             List<Column> columnList = new ArrayList<>(columnsNumber);
             for (int j = 0; j < columnsNumber; j++) {
-                columnList.add(new Column(j));
+                columnList.add(new Column(j+1));
             }
             playerList.get(i).setScoreboard(columnList);
         }
@@ -168,22 +181,32 @@ public class GameLauncher {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
 
+        System.out.println();
+        for (Column c :player.getScoreboard()){
+            c.displayColumn();
+        }
+        System.out.println();
+
+
         System.out.println("Which column would you like to save the throw in ?");
         int columnSave = Integer.valueOf(reader.readLine());
         System.out.println("Which row would you like to save the throw in ?");
         String rowSaveString = reader.readLine();
         Row rowSave = Column.retrieveRow(rowSaveString);
-        System.out.println("ROW SAVE " + rowSave);
-
-        player.saveThrow(columnSave - 1, rowSave, possibilities.getRowValue(rowSave));
-        player.getScoreboard().get(columnSave - 1).displayColumn();
-        endOfRound();
+        if (player.getScoreboard().get(columnSave - 1).checkFillable(rowSave)){
+            System.out.println("ROW SAVE " + rowSave);
+            player.saveThrow(columnSave - 1, rowSave, possibilities.getRowValue(rowSave));
+            player.getScoreboard().get(columnSave - 1).displayColumn();
+            endOfRound();
+        }else{
+            System.out.println("Row " + rowSaveString + "is already filled.");
+            inputThrow(player, possibilities);
+        }
     }
 
     private static void endOfRound(){
         throwNumber = 3;
-        /*TODO
-        activePlayer = nextPlayer();
-        */
+        activePlayerNumber += 1;
+        activePlayerNumber %= playersNumber;
     }
 }
