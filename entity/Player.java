@@ -6,7 +6,6 @@ import java.util.List;
 public class Player {
 
     private String name;
-    private int order;
     private int score;
     private List<Column> scoreboard;
 
@@ -14,7 +13,6 @@ public class Player {
     public Player (String name, int order) {
 
         this.name = name;
-        this.order = order;
         this.score = 0;
         this.scoreboard = new ArrayList<>();
 
@@ -36,8 +34,15 @@ public class Player {
         return this.scoreboard;
     }
 
-    public int getOrder(){
-        return this.order;
+    public boolean isScoreboardFull(){
+        boolean scoreboardComplete = true;
+        for (Column c : getScoreboard()){
+            if (!c.isColumnFull()){
+                scoreboardComplete = false;
+                break;
+            }
+        }
+        return scoreboardComplete;
     }
 
     public int getScore(){
