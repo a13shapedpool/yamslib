@@ -6,11 +6,9 @@ import com.example.yamslib.entity.Row;
 import com.example.yamslib.entity.Type;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 public class Throw {
-
 
     private static final Integer POINT_PAIR = 10;
     private static final Integer POINT_DOUBLEPAIR = 20;
@@ -125,15 +123,15 @@ public class Throw {
 
             if (throwRes[i] >= 5) {
                 possibilities.addPointToRow(Row.YAMS, POINT_YAMS);
+                possibilities.addPointToRow(Row.FULL, POINT_FULL);
             }
         }
 
-        if (pairList.size() == 2 || possibilities.getRow(Row.FOUROAK).equals(POINT_FOUROAK)){
+        if (pairList.size() == 2 || possibilities.getRowValue(Row.FOUROAK) == POINT_FOUROAK){
             possibilities.addPointToRow(Row.TWOPAIR, POINT_DOUBLEPAIR);
         }
 
-        if (possibilities.getRow(Row.PAIR).equals(POINT_PAIR)
-                && possibilities.getRow(Row.THREEOAK).equals(POINT_THREEOAK)
+        if (possibilities.getRowValue(Row.THREEOAK) == POINT_THREEOAK
                 && pairList.size() == 2){
             possibilities.addPointToRow(Row.FULL, POINT_FULL);
         }
