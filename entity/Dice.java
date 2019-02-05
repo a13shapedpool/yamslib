@@ -14,7 +14,7 @@ public class Dice {
     }
 
     public void resetDice(){
-        this.value = 1;
+        this.relaunch = true;
     }
 
     public int getValue(){

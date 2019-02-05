@@ -151,12 +151,11 @@ public class GameLauncher {
 
                         if (!reroll.equals("0")) {
                             for (int i = 0; i < reroll.length(); i++) {
-                                int nb = reroll.charAt(i);
-                                //TODO Check the -49 thingy
-                                diceList.get(nb - 49).saveDice();
-                            }
+                                // Convert char to int -1 for the right index
+                                int nb = reroll.charAt(i) -'0' - 1;
+                                diceList.get(nb).saveDice();
                         }
-
+                        }
 
                         System.out.format("\nRerolling other dices...\n");
                         throwNumber += 1;

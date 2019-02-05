@@ -49,6 +49,9 @@ public class Throw {
     }
 
     public int[] analyseThrow(List<Dice> diceList) {
+        for (Dice d: diceList){
+            d.resetDice();
+        }
         return getDicesValues(diceList);
     }
 
